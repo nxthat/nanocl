@@ -106,14 +106,15 @@ async fn init_daemon(
   };
 
   let options = Some(CreateContainerOptions {
-    name: "system-nanocl-daemon",
+    name: "system-nano-daemon",
+    ..Default::default()
   });
 
   let c_res = docker_api.create_container(options, config).await?;
 
   docker_api
     .start_container(
-      "system-nanocl-daemon",
+      "system-nano-daemon",
       None::<StartContainerOptions<String>>,
     )
     .await?;
@@ -169,14 +170,15 @@ async fn spawn_deamon(
   };
 
   let options = Some(CreateContainerOptions {
-    name: "system-nanocl-daemon",
+    name: "system-nano-daemon",
+    ..Default::default()
   });
 
   docker_api.create_container(options, config).await?;
 
   docker_api
     .start_container(
-      "system-nanocl-daemon",
+      "system-nano-daemon",
       None::<StartContainerOptions<String>>,
     )
     .await?;
@@ -206,7 +208,7 @@ pub async fn exec_setup(args: &SetupArgs) -> Result<(), CliError> {
       )?;
       install_store_image(&docker_api).await?;
       install_daemon_image(&docker_api).await?;
-      if instance_exists("system-nanocl-daemon", &docker_api).await? {
+      if instance_exists("system-nano-daemon", &docker_api).await? {
         return Ok(());
       }
       init_daemon(&config, &docker_api).await?;
